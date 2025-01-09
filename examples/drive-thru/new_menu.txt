@@ -1,0 +1,31 @@
+Category: Chicken
+Original Recipe: $3.5 (Kcal: 400, Fat: 22g, Protein: 28g, Allergens: wheat, soy)
+Popcorn Chicken: $4 (Kcal: 350, Fat: 20g, Protein: 25g, Allergens: wheat, soy)
+Hot Wings: $3 (Kcal: 270, Fat: 18g, Protein: 19g, Allergens: wheat)
+Snackbox: $15 (Kcal: 150, Fat: 10g, Protein: 12g)
+Crispy Tenders: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+Original Piece: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+Tender Chicken: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+
+Category: Drinks
+Iced Tea: $2.8 (Kcal: 340, Fat: 17g, Protein: 4g, Allergens: wheat)
+Pepsi: $2.8 (Kcal: 170, Fat: 10g, Protein: 2g, Allergens: dairy)
+7Up: $2.8 (Kcal: 340, Fat: 17g, Protein: 4g, Allergens: wheat)
+Fanta: $2.8 (Kcal: 170, Fat: 10g, Protein: 2g, Allergens: dairy)
+
+Category: Burgers
+Crunch Burger: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+Original Fillet Breaded: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+Original Fillet: $15 (Kcal: 150, Fat: 100g, Protein: 10g, Allergens: wheat, soy)
+Zinger Burger: $4.5 (Kcal: 451, Fat: 25g, Protein: 28g, Allergens: wheat, soy)
+Tower Burger: $5.2 (Kcal: 451, Fat: 25g, Protein: 28g, Allergens: wheat, soy)
+
+Category: Side Dishes
+Coleslaw: $1.7 (Kcal: 170, Fat: 10g, Protein: 2g, Allergens: dairy)
+Fries: $2.5 (Kcal: 340, Fat: 17g, Protein: 4g, Allergens: wheat)
+Corn: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
+
+Category: Desserts
+Chocolate Sundae: $2.5 (Kcal: 220, Fat: 9g, Protein: 3g, Allergens: dairy, soy)
+Apple Pie: $2.2 (Kcal: 250, Fat: 12g, Protein: 2g, Allergens: wheat, soy)
+Ice Cream: $15 (Kcal: 150, Fat: 100g, Protein: 10g)
