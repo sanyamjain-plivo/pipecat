@@ -29,7 +29,7 @@ async def run_bot(websocket_client, stream_id):
         ),
     )
 
-    llm = PlivoOpenAIWrapper(llm_model="gpt-4o", pinecone_index_name="drive-thru-menu", retriever_tool_name="kFC_order_menu", retriever_tool_description="Useful when you need to answer questions about KFC Menu")
+    llm = PlivoOpenAIWrapper(llm_model="gpt-4o", pinecone_index_name="drive-thru-menu", pinecone_data_file_name="new_menu.txt", retriever_tool_name="kFC_order_menu", retriever_tool_description="Useful when you need to answer questions about KFC Menu")
     lc_tools = [llm.create_retriever_tool(), create_order, cancel_order, get_order, add_item_to_order, delete_item_from_order, update_quantity_of_item_in_order]
     llm.set_llm_tools(lc_tools)
     lc = PlivoLangchainProcessor(llm=llm)

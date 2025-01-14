@@ -26,10 +26,12 @@ class PlivoOpenAIWrapper:
     def __init__(self,
                  llm_model,
                  pinecone_index_name=None,
+                 pinecone_data_file_name=None,
                  retriever_tool_name=None,
                  retriever_tool_description=None):
         self.llm_model = llm_model
         self.pinecone_index_name = pinecone_index_name
+        self.pinecone_data_file_name = pinecone_data_file_name
         self.retriever_tool_name = retriever_tool_name
         self.retriever_tool_description = retriever_tool_description
         self.llm_tools = []
@@ -77,7 +79,7 @@ class PlivoOpenAIWrapper:
             raise ValueError("Pinecone index name, retriever tool name and retriever tool description are required")
 
         pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-        pinecone_index = PineconeIndex(self.pinecone_index_name, pc)
+        pinecone_index = PineconeIndex(self.pinecone_index_name, pc, self.pinecone_data_file_name)
         retriever = pinecone_index.set_and_retrieve_pinecone_data(
             index_name=self.pinecone_index_name,
         )

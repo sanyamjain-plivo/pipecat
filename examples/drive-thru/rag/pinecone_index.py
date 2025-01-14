@@ -10,10 +10,10 @@ import os
 
 
 class PineconeIndex:
-    def __init__(self, index_name, pc):
+    def __init__(self, index_name, pc, file_name):
         self.index_name = index_name
         self.pc = pc
-        self.file_name = "new_menu.txt"
+        self.file_name = file_name
 
     def set_data_to_pinecone(self, data):    
         existing_indexes = [index_info["name"] for index_info in self.pc.list_indexes()]
