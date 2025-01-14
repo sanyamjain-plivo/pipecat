@@ -7,52 +7,54 @@ from pinecone import ServerlessSpec
 import openai
 import os
 
-def set_data_to_pinecone(pc, data):
-    index_name = "drive-thru-menu"
-    
-    existing_indexes = [index_info["name"] for index_info in pc.list_indexes()]
 
-    docs = embed_text(data)
-    if index_name not in existing_indexes:
-        print("Creating index")
-        pc.create_index(
-            name=index_name,
-            dimension=1536, # Replace with your model dimensions
-            metric="cosine", # Replace with your model metric
-            spec=ServerlessSpec(
-            cloud="aws",
-            region="us-east-1"
-            ) 
+
+class PineconeIndex:
+    def __init__(self, index_name, pc):
+        self.index_name = index_name
+        self.pc = pc
+        self.file_name = "new_menu.txt"
+
+    def set_data_to_pinecone(self, data):    
+        existing_indexes = [index_info["name"] for index_info in self.pc.list_indexes()]
+
+        docs = self.embed_text(data)
+        if self.index_name not in existing_indexes:
+            print("Creating index")
+            self.pc.create_index(
+                name=self.index_name,
+                dimension=1536, # Replace with your model dimensions
+                metric="cosine", # Replace with your model metric
+                spec=ServerlessSpec(
+                    cloud="aws",
+                    region="us-east-1"
+                ) 
+            )
+    
+            while not self.pc.describe_index(self.index_name).status['ready']:
+                print("Waiting for index to be ready")
+                time.sleep(1)
+    
+            embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY")) #OPENAI API KEY
+            PineconeVectorStore.from_texts(docs, embeddings, index_name=self.index_name)
+        
+    def set_and_retrieve_pinecone_data(self, index_name):
+        raw_data = open(self.file_name, "r").read()
+        self.set_data_to_pinecone(raw_data)
+        
+        vector_store = PineconeVectorStore.from_existing_index(
+            index_name=index_name,
+            embedding=OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY")),
         )
     
-        while not pc.describe_index(index_name).status['ready']:
-            print("Waiting for index to be ready")
-            time.sleep(1)
-    
-        index = pc.Index(index_name)
-        print(f"index is {index}")
-        print(f"updating index {index_name}")
-        embeddings = OpenAIEmbeddings(api_key="") #OPENAI API KEY
-        PineconeVectorStore.from_texts(docs, embeddings, index_name=index_name)
-        
-    
+        return vector_store.as_retriever()
 
-def embed_text(text:str):
-    
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap=200,
-        length_function=len,
-        is_separator_regex=False)
-    
-    split_text = text_splitter.split_text(text)
-    return split_text
-
-
-
-def generate_embeddings(text:str):
-    embeddings = openai.embeddings.create(
-        input=text,
-        model="text-embedding-3-small"
-    )
-    return embeddings
+    def embed_text(self, text:str):
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=800,
+            chunk_overlap=200,
+            length_function=len,
+            is_separator_regex=False)
+            
+        split_text = text_splitter.split_text(text)
+        return split_text

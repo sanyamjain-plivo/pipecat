@@ -8,41 +8,41 @@ from pipecat.frames.frames import (
     LLMFullResponseEndFrame,
 )
 from pipecat.processors.frameworks.langchain import LangchainProcessor
+from wrappers.plivo_openai_wrapper import PlivoOpenAIWrapper
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
 
-class LangchainRAGProcessor(LangchainProcessor):
-    def __init__(self, chain: Runnable, transcript_key: str = "input"):
-        super().__init__(chain, transcript_key)
-        self._chain = chain
+
+class PlivoLangchainProcessor(LangchainProcessor):
+    
+    def __init__(self, llm: PlivoOpenAIWrapper, transcript_key: str = "input"):
+        self.llm = llm
         self._transcript_key = transcript_key
+        self.message_store = {}
+        super().__init__(self.create_chain(), transcript_key)
         
     def add_task(self, task):
         self._task = task
 
     @staticmethod
     def __get_token_value(text: Union[str, AIMessageChunk], task) -> str:
-        print("text is", text)
         match text:
             case str():
-                print("qwertyuio")
                 return text
             case AIMessageChunk():
-                print("werfghj")
                 return text.content
             case dict() as d if "output" in d:
-                print("asdfghjk")
                 return d["output"]
             case dict() as d if "actions" in d:
                 # this is a tool call
-                print("tool call")
                 tool_agent_action = d["actions"]
                 tool_agent_action[0].log
                 if "responded" in tool_agent_action[0].log:
                     response = tool_agent_action[0].log.split("responded:")[1].split("\n")[0].strip()
-                    print("tool_agent_action", response)
                     return response
                 return ""
             case _:
-                print("zxcvbnm")
                 return ""
 
     async def _ainvoke(self, text: str):
@@ -63,5 +63,24 @@ class LangchainRAGProcessor(LangchainProcessor):
             
         finally:
             await self.push_frame(LLMFullResponseEndFrame())
+            
+    def create_chain(self):
+        
+        self._chain = RunnableWithMessageHistory(
+            self.llm.get_llm_agent_executor(), 
+            self.get_session_history,
+            history_messages_key="chat_history",
+            input_messages_key="input",
+            output_messages_key="output"
+        )
+        return self._chain
+        
+    def get_session_history(self, session_id: str) -> BaseChatMessageHistory:
+        if session_id not in self.message_store:
+            self.message_store[session_id] = ChatMessageHistory()
+        return self.message_store[session_id]
+
+
+
 
 
