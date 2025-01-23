@@ -12,7 +12,7 @@ from pipecat.transports.network.fastapi_websocket import (
 )
 from deepgram import LiveOptions
 from pipecat.frames.frames import TextFrame
-from plivo import PlivoFrameSerializer
+from pipecat.serializers.plivo import PlivoFrameSerializer
 from loguru import logger
 from dotenv import load_dotenv
 from pinecone import Pinecone
@@ -45,9 +45,10 @@ from rag.helpers import (
 
 
 
-os.environ["PINECONE_API_KEY"] = ""
-os.environ["OPENAI_API_KEY"] = ""
-os.environ["DEEPGRAM_API_KEY"] = ""
+
+os.environ["PINECONE_API_KEY"] = os.getenv("PINECONE_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["DEEPGRAM_API_KEY"] = os.getenv("DEEPGRAM_API_KEY")
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 messages = []

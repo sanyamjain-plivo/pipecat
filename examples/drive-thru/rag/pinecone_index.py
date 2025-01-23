@@ -32,7 +32,7 @@ def set_data_to_pinecone(pc, data):
         index = pc.Index(index_name)
         print(f"index is {index}")
         print(f"updating index {index_name}")
-        embeddings = OpenAIEmbeddings(api_key="") #OPENAI API KEY
+        embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY")) #OPENAI API KEY
         PineconeVectorStore.from_texts(docs, embeddings, index_name=index_name)
         
     
